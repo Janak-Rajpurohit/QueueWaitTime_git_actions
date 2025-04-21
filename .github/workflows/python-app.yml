@@ -41,4 +41,4 @@ jobs:
 
       - name: Push Docker image to Docker Hub
         run: |
-          docker push your_dockerhub_username/your_image_name:${{ github.sha }}
+          docker push ${{ secrets.DOCKER_USERNAME }}/queue-wait-time-predictor:${{ github.sha }}
