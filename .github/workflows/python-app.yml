@@ -36,7 +36,8 @@ jobs:
 
       - name: Build Docker image
         run: |
-          docker build -t your_dockerhub_username/your_image_name:${{ github.sha }} .
+          docker build -t ${{ secrets.DOCKER_USERNAME }}/queue-wait-time-predictor:${{ github.sha }} .
+
 
       - name: Push Docker image to Docker Hub
         run: |
