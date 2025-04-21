@@ -1,4 +1,4 @@
-name: Run Unit Tests with Docker
+name: Run Unit Tests and Build Docker Image
 
 on:
   push:
@@ -9,8 +9,8 @@ on:
       - main
 
 jobs:
-  test:
-    name: Run Pytest Unit Tests in Docker
+  build:
+    name: Build and Push Docker Image
     runs-on: ubuntu-latest
 
     steps:
@@ -28,10 +28,16 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-buildx-
 
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }} # Set your Docker Hub username in GitHub Secrets
+          password: ${{ secrets.DOCKER_PASSWORD }} # Set your Docker Hub password in GitHub Secrets
+
       - name: Build Docker image
         run: |
-          docker build -t queue-wait-time-predictor .
+          docker build -t your_dockerhub_username/your_image_name:${{ github.sha }} .
 
-      - name: Run tests inside Docker container
+      - name: Push Docker image to Docker Hub
         run: |
-          docker run --rm queue-wait-time-predictor pytest tests/ --disable-warnings --maxfail=1
+          docker push your_dockerhub_username/your_image_name:${{ github.sha }}
